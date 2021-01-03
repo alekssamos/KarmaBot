@@ -7,7 +7,7 @@ from aiogram.dispatcher.filters import BoundFilter
 from app.config import PLUS, PLUS_TRIGGERS, PLUS_EMOJI, MINUS, MINUS_EMOJI, MINUS_TRIGGERS
 
 PUNCTUATIONS = ",.!)"
-INF = float('inf')
+INF = 'inf'
 
 
 @dataclass
@@ -20,7 +20,7 @@ class KarmaFilter(BoundFilter):
 
     karma_change: bool
 
-    async def check(self, message: types.Message) -> typing.Dict[str, typing.Dict[str, float]]:
+    async def check(self, message: types.Message) -> typing.Dict[str, typing.Dict[str, int]]:
         possible_trigger_text = message.text or message.caption
         if possible_trigger_text is None and message.sticker:
             possible_trigger_text = message.sticker.emoji or None
@@ -31,7 +31,7 @@ class KarmaFilter(BoundFilter):
         return rez
 
 
-def get_karma_trigger(text: str) -> typing.Tuple[typing.Optional[float], str]:
+def get_karma_trigger(text: str) -> typing.Tuple[typing.Optional[int], str]:
     """
     :return: tuple (how_change, comment)
         how_change: shows how much to change karma wants user
@@ -62,7 +62,7 @@ def get_first_word(text: str) -> typing.Tuple[str, str]:
     return possible_trigger.lower().rstrip(PUNCTUATIONS), " ".join(comment)
 
 
-def has_plus_karma(possible_trigger: str) -> typing.Optional[float]:
+def has_plus_karma(possible_trigger: str) -> typing.Optional[int]:
     if len(possible_trigger) == 0:
         # blank line has no triggers
         return None
@@ -85,7 +85,7 @@ def has_plus_karma(possible_trigger: str) -> typing.Optional[float]:
     return None
 
 
-def has_minus_karma(possible_trigger: str) -> typing.Optional[float]:
+def has_minus_karma(possible_trigger: str) -> typing.Optional[int]:
     if len(possible_trigger) == 0:
         return None
     if possible_trigger in MINUS_TRIGGERS:

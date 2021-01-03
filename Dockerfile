@@ -1,6 +1,6 @@
 FROM python:3.7-slim-buster
-LABEL maintainer="bomzheg <bomzheg@gmail.com>" \
-      description="Karma Telegram Bot"
+LABEL maintainer="alekssamos <aleks-samos@yandex.ru>" \
+      description="Karma Telegram Bot fork"
 COPY requirements.txt requirements.txt
 RUN apt update -y \
     && apt install -y gcc \
@@ -16,4 +16,4 @@ WORKDIR "."
 EXPOSE 3000
 COPY initialize.py initialize.py
 COPY app app
-ENTRYPOINT ["python3", "-m", "app"]
+ENTRYPOINT ["python3", "-m", "app", "-p"]

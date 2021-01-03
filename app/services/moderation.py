@@ -117,7 +117,7 @@ def get_duration(text: str):
     return duration, comment
 
 
-def check_need_auto_restrict(karma: float):
+def check_need_auto_restrict(karma: int):
     return all([
         config.ENABLE_AUTO_RESTRICT_ON_NEGATIVE_KARMA,
         karma <= config.NEGATIVE_KARMA_TO_RESTRICT,

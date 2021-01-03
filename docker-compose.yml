@@ -19,14 +19,6 @@ services:
         target: "/jsons"
     env_file: .env
     entrypoint: ["python3", "-m", "app", "-p"]
-    networks:
-      - reverse-proxy
-
-
-networks:
-  reverse-proxy:
-    external:
-      name: nginx-revers-proxy
 
 volumes:
   problems:

@@ -21,13 +21,13 @@ from app.utils.timedelta_functions import format_timedelta
 a_throttle = AdaptiveThrottle()
 
 
-def get_how_change_text(number: float) -> str:
+def get_how_change_text(number: int) -> str:
     if number > 0:
         return "увеличили"
     if number < 0:
         return "уменьшили"
     else:
-        raise ValueError("karma_trigger must be float and not 0")
+        raise ValueError("karma_trigger must be int and not 0")
 
 
 async def too_fast_change_karma(message: types.Message, *_, **__):
@@ -77,7 +77,7 @@ async def karma_change(message: types.Message, karma: dict, user: User, chat: Ch
         + result_change_karma.abs_change
 
     msg = await message.reply(
-        "Вы {how_change} карму <b>{name}</b> до <b>{karma_new:.2f}</b> ({power:+.2f})"
+        "Вы {how_change} рейтинг <b>{name}</b> до <b>{karma_new}</b> ({power})"
         "\n\n{notify_auto_restrict_text}".format(
             how_change=get_how_change_text(karma['karma_change']),
             name=quote_html(target.fullname),
@@ -124,7 +124,7 @@ async def cancel_karma(callback_query: types.CallbackQuery, callback_data: typin
     if user_cancel_id != callback_query.from_user.id:
         return await callback_query.answer("Эта кнопка не для Вас", cache_time=3600)
     karma_event_id = int(callback_data['karma_event_id'])
-    rollback_karma = float(callback_data['rollback_karma'])
+    rollback_karma = int(callback_data['rollback_karma'])
     moderator_event_id = callback_data['moderator_event_id']
     moderator_event_id = None if moderator_event_id == "null" else int(moderator_event_id)
     await cancel_karma_change(karma_event_id, rollback_karma, moderator_event_id, callback_query.bot)

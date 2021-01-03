@@ -7,7 +7,7 @@ cb_karma_cancel = CallbackData("karma_cancel", "user_id", "karma_event_id", "rol
 
 
 def get_kb_karma_cancel(
-        user: User, karma_event: KarmaEvent, rollback_karma: float, moderator_event: ModeratorEvent
+        user: User, karma_event: KarmaEvent, rollback_karma: int, moderator_event: ModeratorEvent
 ) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(
         "Отменить", callback_data=cb_karma_cancel.new(

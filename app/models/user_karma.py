@@ -1,5 +1,3 @@
-from math import sqrt
-
 from loguru import logger
 from tortoise import fields
 from tortoise.models import Model
@@ -17,7 +15,7 @@ class UserKarma(Model):
     uc_id = fields.IntField(pk=True)
     user: fields.ForeignKeyRelation[User] = fields.ForeignKeyField('models.User', related_name='karma')
     chat: fields.ForeignKeyRelation[Chat] = fields.ForeignKeyField('models.Chat', related_name='user_karma')
-    karma = fields.FloatField(default=1)
+    karma = fields.IntField(default=1)
 
     class Meta:
         table = 'user_karma'
@@ -31,13 +29,13 @@ class UserKarma(Model):
     def __repr__(self):
         return str(self)
 
-    async def change(self, user_changed: User, how_change: float, using_db=None):
+    async def change(self, user_changed: User, how_change: int, using_db=None):
         """
         change karma to (self.user) from (user_changed)
         (how_change) must be from -inf to +inf
         """
         if how_change == 0:
-            raise ValueError(f"how_change must be float and not 0 but it is {how_change}")
+            raise ValueError(f"how_change must be int and not 0 but it is {how_change}")
         await self.fetch_related('chat', using_db=using_db)
         power = await self.get_power(user_changed, self.chat)
         if power < 0.01:
@@ -60,7 +58,7 @@ class UserKarma(Model):
             target_user: User,
             chat: Chat,
             user_changed: User,
-            how_change: float,
+            how_change: int,
             using_db=None,
     ):
         """
@@ -80,18 +78,17 @@ class UserKarma(Model):
         return uk, abs_change, relative_change
 
     @classmethod
-    async def get_power(cls, user: User, chat: Chat) -> float:
-        uk, _ = await cls.get_or_create(user=user, chat=chat)
-        return uk.power
+    async def get_power(cls, user: User, chat: Chat) -> int:
+        return 1
 
     @property
-    def power(self) -> float:
-        if self.karma <= 0.0:
+    def power(self) -> int:
+        if self.karma <= 0:
             return 0
-        return sqrt(self.karma)
+        return 1
 
     @property
-    def karma_round(self) -> float:
+    def karma_round(self) -> int:
         return round(self.karma, 2)
 
     async def number_in_top(self) -> int:

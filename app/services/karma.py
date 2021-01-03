@@ -28,7 +28,7 @@ async def get_top(chat: Chat, user: User, limit: int = 15):
     return text + "\n" + additional_users
 
 
-def format_output(list_karmas: typing.List[typing.Tuple[int, User, float]]) -> str:
+def format_output(list_karmas: typing.List[typing.Tuple[int, User, int]]) -> str:
     return "\n".join(
         [f"{i} {user.mention_no_link} {hbold(karma)}"
             for i, user, karma in list_karmas]
@@ -37,7 +37,7 @@ def format_output(list_karmas: typing.List[typing.Tuple[int, User, float]]) -> s
 
 def add_caption(text_list: str) -> str:
     if text_list == "":
-        text = "Никто в чате не имеет кармы"
+        text = "Никто в чате не имеет рейтинга"
     else:
         text = "Список самых почётных пользователей чата:\n" + text_list
     return text
@@ -47,7 +47,7 @@ def add_separator(text: str) -> str:
     return text + "\n..."
 
 
-def get_top_ids(list_karmas: typing.List[typing.Tuple[User, float]]) -> typing.Set[int]:
+def get_top_ids(list_karmas: typing.List[typing.Tuple[User, int]]) -> typing.Set[int]:
     return {user.id for user, _ in list_karmas}
 
 

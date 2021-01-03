@@ -13,10 +13,10 @@ from app.models.chat import Chat
 async def cmd_start(message: types.Message):
     logger.info("User {user} start conversation with bot", user=message.from_user.id)
     await message.answer(
-        "Я бот для подсчёта кармы в группе, просто добавьте меня "
-        "в группу и плюсуйте друг другу в карму.\n"
+        "Я бот для подсчёта рейтинга в группе, просто добавьте меня "
+        "в группу и плюсуйте друг другу в рейтинг.\n"
         "<code>!help</code> - справка о командах\n"
-        "<code>!about</code> - информация о боте и его исходники "
+        # "<code>!about</code> - информация о боте и его исходники "
     )
 
 
@@ -26,17 +26,15 @@ async def cmd_help(message: types.Message):
     logger.info("User {user} read help in {chat}", user=message.from_user.id, chat=message.chat.id)
     await message.reply(
         (
-            'Плюсануть в карму можно начав сообщение с "{plus}". '
+            'Прибавить рейтинг можно начав сообщение с: "{plus}". \n'
             'Минусануть - написав первой строкой что-то из "{minus}".\n'
             'Чтобы выбрать пользователя - нужно ответить реплаем на сообщение пользователя '
             'или упомянуть его через @ (работает даже если у пользователя нет username).\n'
-            'Сила, с которой пользователь меняет другим карму, зависит от собственной кармы, '
-            'чем она больше, тем больше будет изменение кармы у цели '
-            '(вычисляется как корень из кармы)\n'
-            '<code>!top</code> [chat_id] - топ юзеров по карме для текущего чата или для чата с chat_id \n'
+            'Увеличение и уменьшение идёт всегда ровно на одну единицу за раз\n'
+            '<code>!top</code> [chat_id] - лучшие пользователи по рейтингу для текущего чата или для чата с chat_id \n'
             '<code>!about</code> - информация о боте и его исходники\n'
             '<code>!me</code> - посмотреть свою карму (желательно это делать в личных сообщениях с ботом)\n'
-            '<code>!report</code> {{реплаем}} - пожаловаться на сообщение модераторам\n'
+            # '<code>!report</code> {{реплаем}} - пожаловаться на сообщение модераторам\n'
             '<code>!idchat</code> - показать Ваш id, id чата и, '
             'если имеется, - id пользователя, которому Вы ответили командой'
         ).format(
@@ -50,7 +48,10 @@ async def cmd_help(message: types.Message):
 @dp.throttled(rate=3)
 async def cmd_about(message: types.Message):
     logger.info("User {user} about", user=message.from_user.id)
-    await message.reply('Исходники по ссылке https://github.com/bomzheg/KarmaBot')
+    await message.reply(
+    'Форк карма бота. Исходники по ссылке https://github.com/alekssamos/KarmaBot\n'
+    'Считает рейтинг ровно по единице, а не в зависимости от силы.'
+    )
 
 
 @dp.message_handler(commands='idchat', commands_prefix='!')

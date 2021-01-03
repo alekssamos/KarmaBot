@@ -13,6 +13,7 @@ async def remove_kb(message: types.Message, sleep_time: int = 0):
 
 
 async def delete_message(message: types.Message, sleep_time: int = 0):
+    print("delete_message:", message, "time:", sleep_time, "seconds")
     await asyncio.sleep(sleep_time)
     with suppress(MessageCantBeDeleted, MessageToDeleteNotFound):
         await message.delete()

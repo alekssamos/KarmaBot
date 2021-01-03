@@ -50,7 +50,7 @@ async def get_top(message: types.Message, chat: Chat, user: User):
     logger.info("user {user} ask his karma in chat {chat}", user=user.tg_id, chat=chat.chat_id)
     uk, number_in_top = await get_me_chat_info(chat=chat, user=user)
     msg = await message.reply(
-        f"Ваша карма в данном чате: <b>{uk.karma:.2f}</b> ({number_in_top})",
+        f"Ваш рейтинг в данном чате: <b>{uk.karma}</b> ({number_in_top})",
         disable_web_page_preview=True
     )
     asyncio.create_task(delete_message(msg, config.TIME_TO_REMOVE_TEMP_MESSAGES))
@@ -64,13 +64,13 @@ async def get_top(message: types.Message, user: User):
     uks = await get_me_info(user)
     text = ""
     for uk, number_in_top in uks:
-        text += f"\n{uk.chat.mention} <b>{uk.karma:.2f}</b> ({number_in_top})"
+        text += f"\n{uk.chat.mention} <b>{uk.karma}</b> ({number_in_top})"
     if text:
         return await message.reply(
-            f"У Вас есть карма в следующих чатах:{text}",
+            f"У Вас есть рейтинг в следующих чатах:{text}",
             disable_web_page_preview=True
         )
     await message.reply(
-        f"У Вас нет никакой кармы ни в каких чатах",
+        f"У Вас нет рейтинга ни в каких чатах",
         disable_web_page_preview=True
     )

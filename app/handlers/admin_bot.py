@@ -75,14 +75,14 @@ async def add_manual(message: types.Message, chat: Chat, user: User):
     try:
         users_karmas = list(
             map(
-                lambda x: (int(x[0]), float(x[1])),
+                lambda x: (int(x[0]), int(x[1])),
                 (uk.split(" ") for uk in args.split('\n'))
             )
         )
     except ValueError:
         return await message.reply(
             "Жду сообщение вида \n!add_manual [user_id karma]\n"
-            "user_id должно быть целым числом, а карма числом с плавающей точкой"
+            "user_id и рейтинг должны быть целым числом"
         )
     for user_id, karma in users_karmas:
         target_user, _ = await User.get_or_create(tg_id=user_id)
@@ -96,4 +96,4 @@ async def add_manual(message: types.Message, chat: Chat, user: User):
             karma=karma,
             chat=chat.chat_id
         )
-    await message.reply("Кармы успешно обновлены", disable_notification=True)
+    await message.reply("Рейтинги успешно обновлены", disable_notification=True)

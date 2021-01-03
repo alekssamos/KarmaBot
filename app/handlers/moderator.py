@@ -110,7 +110,7 @@ async def get_info_about_user(message: types.Message, chat: Chat, target: User):
     info = await get_user_info(target, chat)
     target_karma = await target.get_karma(chat)
     if target_karma is None:
-        target_karma = "пока не имеет кармы"
+        target_karma = "пока не имеет рейтинга"
     information = f"Данные на {target.mention_link} ({target_karma}):\n" + "\n".join(info)
     try:
         await bot.send_message(
