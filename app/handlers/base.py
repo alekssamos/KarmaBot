@@ -1,11 +1,14 @@
+import asyncio
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.utils.markdown import hpre, hbold
 from loguru import logger
 
+from app import config
 from app.config import PLUS_TRIGGERS, MINUS_TRIGGERS, PLUS_EMOJI, MINUS_EMOJI
 from app.misc import dp
 from app.models.chat import Chat
+from app.services.remove_message import delete_message
 
 
 @dp.message_handler(commands=["start"], commands_prefix='!/')
@@ -24,7 +27,7 @@ async def cmd_start(message: types.Message):
 @dp.throttled(rate=3)
 async def cmd_help(message: types.Message):
     logger.info("User {user} read help in {chat}", user=message.from_user.id, chat=message.chat.id)
-    await message.reply(
+    msg = await message.reply(
         (
             'Прибавить рейтинг можно начав сообщение с: "{plus}". \n'
             'Минусануть - написав первой строкой что-то из "{minus}".\n'
@@ -42,16 +45,22 @@ async def cmd_help(message: types.Message):
             minus='", "'.join([*MINUS_TRIGGERS, *MINUS_EMOJI])
         )
     )
+    if message.chat.type != "PRIVATE":
+        asyncio.create_task(delete_message(msg, config.TIME_TO_REMOVE_TEMP_MESSAGES))
+        asyncio.create_task(delete_message(message, config.TIME_TO_REMOVE_TEMP_MESSAGES))
 
 
 @dp.message_handler(commands=["about"], commands_prefix='!')
 @dp.throttled(rate=3)
 async def cmd_about(message: types.Message):
     logger.info("User {user} about", user=message.from_user.id)
-    await message.reply(
+    msg = await message.reply(
     'Форк карма бота. Исходники по ссылке https://github.com/alekssamos/KarmaBot\n'
     'Считает рейтинг ровно по единице, а не в зависимости от силы.'
     )
+    if message.chat.type != "PRIVATE":
+        asyncio.create_task(delete_message(msg, config.TIME_TO_REMOVE_TEMP_MESSAGES))
+        asyncio.create_task(delete_message(message, config.TIME_TO_REMOVE_TEMP_MESSAGES))
 
 
 @dp.message_handler(commands='idchat', commands_prefix='!')
@@ -66,7 +75,10 @@ async def get_idchat(message: types.Message):
             f"\nid {hbold(message.reply_to_message.from_user.full_name)}: "
             f"{hpre(message.reply_to_message.from_user.id)}"
         )
-    await message.reply(text, disable_notification=True)
+    msg = await message.reply(text, disable_notification=True)
+    if message.chat.type != "PRIVATE":
+        asyncio.create_task(delete_message(msg, config.TIME_TO_REMOVE_TEMP_MESSAGES))
+        asyncio.create_task(delete_message(message, config.TIME_TO_REMOVE_TEMP_MESSAGES))
 
 
 @dp.message_handler(state='*', commands='cancel')

@@ -41,7 +41,8 @@ async def get_top(message: types.Message, chat: Chat, user: User):
     logger.info("user {user} ask top karma of chat {chat}", user=user.tg_id, chat=chat.chat_id)
     text = await get_karma_top(chat, user)
 
-    await message.reply(text, disable_web_page_preview=True)
+    msg = await message.reply(text, disable_web_page_preview=True)
+    asyncio.create_task(delete_message(msg, config.TIME_TO_REMOVE_TEMP_MESSAGES))
 
 
 @dp.message_handler(chat_type=[ChatType.GROUP, ChatType.SUPERGROUP], commands=["me"], commands_prefix='!')
