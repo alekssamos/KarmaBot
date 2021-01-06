@@ -19,7 +19,8 @@ async def change_karma(user: User, target_user: User, chat: Chat, how_change: in
         logger.info("user {user} try to change self or bot karma ", user=user.tg_id)
         raise AutoLike(user_id=user.tg_id, chat_id=chat.chat_id)
 
-    if how_change < 0 and await user_has_now_ro(target_user, chat, bot):
+    print("app.services.change_karma.change_karma", "how_change", how_change)
+    if int(how_change) < 0 and await user_has_now_ro(target_user, chat, bot):
         logger.info("user {user} try to change karma of another user {target} with RO ",
                     user=user.tg_id, target=target_user.tg_id)
         raise DontOffendRestricted(user_id=user.tg_id, chat_id=chat.chat_id)

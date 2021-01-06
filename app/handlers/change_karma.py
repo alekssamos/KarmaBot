@@ -23,9 +23,9 @@ a_throttle = AdaptiveThrottle()
 
 
 def get_how_change_text(number: int) -> str:
-    if number > 0:
+    if int(number) > 0:
         return "увеличили"
-    if number < 0:
+    if int(number) < 0:
         return "уменьшили"
     else:
         raise ValueError("karma_trigger must be int and not 0")
