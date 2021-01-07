@@ -7,7 +7,7 @@ from aiogram.dispatcher.filters import BoundFilter
 from app.config import PLUS, PLUS_TRIGGERS, PLUS_EMOJI, MINUS, MINUS_EMOJI, MINUS_TRIGGERS
 
 PUNCTUATIONS = ",.!)"
-INF = float('inf')
+INF = 0
 
 
 @dataclass
