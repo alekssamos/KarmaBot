@@ -13,7 +13,7 @@ def get_kb_karma_cancel(
         "Отменить", callback_data=cb_karma_cancel.new(
             user_id=user.tg_id,
             karma_event_id=karma_event.id_,
-            rollback_karma=f"{rollback_karma:.2f}",
+            rollback_karma=f"{rollback_karma}",
             moderator_event_id=moderator_event.id_ if moderator_event is not None else "null",
         )
     )]])
